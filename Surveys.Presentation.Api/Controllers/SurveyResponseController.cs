@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Surveys.Application.Services.Definitions;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Surveys.Presentation.Api.Controllers
@@ -9,10 +11,14 @@ namespace Surveys.Presentation.Api.Controllers
     public class SurveyResponseController : Controller
     {
         private readonly ISurveyResponseService _surveyResponseService;
+        private readonly ILogger _logger;
 
-        public SurveyResponseController(ISurveyResponseService surveyResponseService)
+        public SurveyResponseController(
+            ISurveyResponseService surveyResponseService,
+            ILogger<SurveyResponseController> logger)
         {
             _surveyResponseService = surveyResponseService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -22,12 +28,19 @@ namespace Surveys.Presentation.Api.Controllers
         [Route("GetBySurveyId/{surveyId:int}", Name = nameof(GetSurveyResponsesBySurveyId))]
         public async Task<IActionResult> GetSurveyResponsesBySurveyId(int surveyId)
         {
-            var questionOrder = await _surveyResponseService.GetSurveyResponsesBySurveyId(surveyId);
+            _logger.LogInformation("Performing fetching request...");
 
-            if (questionOrder == null)
+            var surveyResponses = await _surveyResponseService.GetSurveyResponsesBySurveyId(surveyId);
+
+            if (surveyResponses.Count() == 0)
+            {
+                _logger.LogWarning("Unable to find records. There are no records.");
                 return NotFound();
+            }
 
-            return Ok(questionOrder);
+            _logger.LogInformation("Records found. Sending response...");
+
+            return Ok(surveyResponses);
         }
 
         /// <summary>
@@ -37,12 +50,19 @@ namespace Surveys.Presentation.Api.Controllers
         [Route("GetByRespondentId/{respondentId:int}", Name = nameof(GetSurveyResponsesByRespondentId))]
         public async Task<IActionResult> GetSurveyResponsesByRespondentId(int respondentId)
         {
-            var questionOrder = await _surveyResponseService.GetSurveyResponsesByRespondentId(respondentId);
+            _logger.LogInformation("Performing fetching request...");
 
-            if (questionOrder == null)
+            var surveyResponses = await _surveyResponseService.GetSurveyResponsesByRespondentId(respondentId);
+
+            if (surveyResponses.Count() == 0)
+            {
+                _logger.LogWarning("Unable to find records. There are no records.");
                 return NotFound();
+            }
 
-            return Ok(questionOrder);
+            _logger.LogInformation("Records found. Sending response...");
+
+            return Ok(surveyResponses);
         }
     }
 }
