@@ -1,4 +1,4 @@
-CREATE PROCEDURE dbo.SP_DeleteQuestionOrdersBySurveyIdQuestionId
+CREATE OR ALTER PROCEDURE dbo.SP_DeleteQuestionOrdersBySurveyIdQuestionId
 	@QuestionId INT,
 	@SurveyId INT
 AS BEGIN

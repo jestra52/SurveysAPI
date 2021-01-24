@@ -36,6 +36,18 @@ namespace Surveys.Data.Domain.Implementations
             _unitOfWork.Submit();
         }
 
+        public async Task Edit(TEntity item)
+        {
+            await Task.Run(() => GetSet().Update(item));
+            _unitOfWork.Submit();
+        }
+
+        public async Task EditMany(IEnumerable<TEntity> items)
+        {
+            await Task.Run(() => _unitOfWork.EditMany(items));
+            _unitOfWork.Submit();
+        }
+
         public async Task<int> ExecuteSqlRawAsync(string query, params object[] parameters)
         {
             return await _unitOfWork.ExecuteSqlRawAsync(query, parameters);

@@ -94,6 +94,7 @@ namespace Surveys
             services.AddScoped<ISurveyService, SurveyService>();
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IRespondentService, RespondentService>();
+            services.AddScoped<IQuestionOrderService, QuestionOrderService>();
         }
     }
 }

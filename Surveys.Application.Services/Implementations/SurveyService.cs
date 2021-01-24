@@ -44,8 +44,10 @@ namespace Surveys.Application.Services.Implementations
             var surveysDto = _mapper.Map<IEnumerable<SurveyDto>>(surveys);
             var questionOrdersDto = _mapper.Map<IEnumerable<QuestionOrderDto>>(questionOrders);
 
-            surveysDto.ToList().ForEach(s => s.QuestionOrders = questionOrdersDto
-                .Where(q => q.SurveyId.Equals(s.Id.Value)));
+            surveysDto
+                .ToList()
+                .ForEach(s => s.QuestionOrders = questionOrdersDto
+                    .Where(q => q.SurveyId.Equals(s.Id.Value)));
 
             return _mapper.Map<IEnumerable<SurveyDto>>(surveys);
         }
@@ -61,35 +63,19 @@ namespace Surveys.Application.Services.Implementations
             return dto;
         }
 
-        public async Task<int> UpdateSurvey(SurveyDto dto)
+        public async Task<ServiceResponseType> UpdateSurvey(int id, SurveyDto dto)
         {
-            var parameters = new SqlParameter[]
-            {
-                new SqlParameter() {
-                    ParameterName = "@Id",
-                    SqlDbType =  System.Data.SqlDbType.Int,
-                    Direction = System.Data.ParameterDirection.Input,
-                    Value = dto.Id
-                },
-                new SqlParameter() {
-                    ParameterName = "@Name",
-                    SqlDbType =  System.Data.SqlDbType.VarChar,
-                    Direction = System.Data.ParameterDirection.Input,
-                    Size = 50,
-                    Value = dto.Name ?? (object)DBNull.Value
-                },
-                new SqlParameter() {
-                    ParameterName = "@Description",
-                    SqlDbType =  System.Data.SqlDbType.VarChar,
-                    Direction = System.Data.ParameterDirection.Input,
-                    Size = 1000,
-                    Value = dto.Description ?? (object)DBNull.Value
-                }
-            };
+            var survey = await _surveyRepository.GetAsync(id);
 
-            var affectedRows = await _surveyRepository.ExecuteSqlRawAsync("[dbo].[SP_UpdateSurvey] @Id, @Name, @Description", parameters);
+            if (survey == null)
+                return ServiceResponseType.NotFound;
 
-            return affectedRows;
+            survey.Name = dto.Name ?? survey.Name;
+            survey.Description = dto.Description ?? survey.Description;
+
+            await _surveyRepository.Edit(survey);
+
+            return ServiceResponseType.Ok;
         }
 
         public async Task<bool> DeleteSurvey(int id)
@@ -120,13 +106,6 @@ namespace Surveys.Application.Services.Implementations
             await _surveyRepository.RemoveAsync(existingSurvey);
 
             return true;
-        }
-
-        public async Task<IEnumerable<QuestionOrderDto>> GetQuestionOrdersBySurveyId(int id)
-        {
-            var questionOrders = await _questionOrderRepository.GetQuestionOrdersByForeignId(id, (int)CallerType.Survey);
-
-            return _mapper.Map<IEnumerable<QuestionOrderDto>>(questionOrders);
         }
     }
 }

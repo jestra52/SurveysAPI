@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Surveys.Application.Dto;
 using Surveys.Application.Services.Definitions;
+using Surveys.Common.Enum;
 using System.Threading.Tasks;
 
 namespace Surveys.Presentation.Api.Controllers
@@ -92,17 +93,10 @@ namespace Surveys.Presentation.Api.Controllers
             if (!ModelState.IsValid)
                 return new UnprocessableEntityObjectResult(ModelState);
 
-            var survey = await _surveyService.GetSurveyById(id.Value);
+            var response = await _surveyService.UpdateSurvey(id.Value, dto);
 
-            if (survey == null)
+            if (response.Equals(ServiceResponseType.NotFound))
                 return NotFound();
-
-            dto.Id = id;
-
-            var rowsAffected = await _surveyService.UpdateSurvey(dto);
-
-            if (rowsAffected == 0 || rowsAffected > 1)
-                return Problem();
 
             return Ok();
         }
@@ -114,27 +108,12 @@ namespace Surveys.Presentation.Api.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> Remove(int id)
         {
-            var isSurveyRemoved= await _surveyService.DeleteSurvey(id);
+            var response = await _surveyService.DeleteSurvey(id);
 
-            if (!isSurveyRemoved)
+            if (response.Equals(ServiceResponseType.NotFound))
                 return NotFound();
 
             return Ok();
-        }
-
-        /// <summary>
-        /// Gets the question order by Survey Id.
-        /// </summary>
-        [HttpGet]
-        [Route("QuestionOrder/{id:int}", Name = nameof(GetQuestionOrdersBySurveyId))]
-        public async Task<IActionResult> GetQuestionOrdersBySurveyId(int id)
-        {
-            var questionOrder = await _surveyService.GetQuestionOrdersBySurveyId(id);
-
-            if (questionOrder == null)
-                return NotFound();
-
-            return Ok(questionOrder);
         }
     }
 }

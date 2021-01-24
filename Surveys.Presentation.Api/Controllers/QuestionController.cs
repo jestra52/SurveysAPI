@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Surveys.Application.Dto;
 using Surveys.Application.Services.Definitions;
+using Surveys.Common.Enum;
 using System.Threading.Tasks;
 
 namespace Surveys.Presentation.Api.Controllers
@@ -90,17 +91,10 @@ namespace Surveys.Presentation.Api.Controllers
             if (!ModelState.IsValid)
                 return new UnprocessableEntityObjectResult(ModelState);
 
-            var question = await _questionService.GetQuestionById(id.Value);
+            var response = await _questionService.UpdateQuestion(id.Value, dto);
 
-            if (question == null)
+            if (response.Equals(ServiceResponseType.NotFound))
                 return NotFound();
-
-            dto.Id = id;
-
-            var rowsAffected = await _questionService.UpdateQuestion(dto);
-
-            if (rowsAffected == 0 || rowsAffected > 1)
-                return Problem();
 
             return Ok();
         }
@@ -112,9 +106,9 @@ namespace Surveys.Presentation.Api.Controllers
         [Route("{id:int}")]
         public async Task<IActionResult> Remove(int id)
         {
-            var isQuestionRemoved = await _questionService.DeleteQuestion(id);
+            var response = await _questionService.DeleteQuestion(id);
 
-            if (!isQuestionRemoved)
+            if (response.Equals(ServiceResponseType.NotFound))
                 return NotFound();
 
             return Ok();

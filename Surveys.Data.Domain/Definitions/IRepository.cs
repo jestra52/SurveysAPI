@@ -7,6 +7,8 @@ namespace Surveys.Data.Domain.Definitions
     {
         Task AddAsync(TEntity item);
         Task RemoveAsync(TEntity item);
+        Task Edit(TEntity item);
+        Task EditMany(IEnumerable<TEntity> items);
         Task<TEntity> GetAsync(TEntityId id);
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<int> ExecuteSqlRawAsync(string query, params object[] parameters);

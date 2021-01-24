@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Surveys.Data.Domain.Definitions;
 using Surveys.Data.Domain.Entities;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,6 +33,16 @@ namespace Surveys.Data.Domain.Implementations
             ChangeTracker.Entries()
                 .ToList()
                 .ForEach(entry => entry.State = EntityState.Unchanged);
+        }
+
+        public void Edit<TEntity>(TEntity item) where TEntity : class
+        {
+            Update(item);
+        }
+
+        public void EditMany<TEntity>(IEnumerable<TEntity> items) where TEntity : class
+        {
+            UpdateRange(items);
         }
 
         public async Task<int> ExecuteSqlRawAsync(string query, params object[] parameters)

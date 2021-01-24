@@ -1,4 +1,5 @@
 ﻿using Surveys.Application.Dto;
+using Surveys.Common.Enum;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,8 +10,7 @@ namespace Surveys.Application.Services.Definitions
         Task AddSurvey(SurveyDto dto);
         Task<IEnumerable<SurveyDto>> GetSurveys();
         Task<SurveyDto> GetSurveyById(int id);
-        Task<int> UpdateSurvey(SurveyDto dto);
+        Task<ServiceResponseType> UpdateSurvey(int id, SurveyDto dto);
         Task<bool> DeleteSurvey(int id);
-        Task<IEnumerable<QuestionOrderDto>> GetQuestionOrdersBySurveyId(int id);
     }
 }

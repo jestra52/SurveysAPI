@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.Data.SqlClient;
 using Surveys.Application.Dto;
 using Surveys.Application.Services.Definitions;
+using Surveys.Common.Enum;
 using Surveys.Data.Domain.Entities;
 using Surveys.Data.Domain.Repositories.Definitions;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Surveys.Application.Services.Implementations
@@ -45,42 +43,20 @@ namespace Surveys.Application.Services.Implementations
             return _mapper.Map<RespondentDto>(respondent);
         }
 
-        public async Task<int> UpdateRespondent(RespondentDto dto)
+        public async Task<ServiceResponseType> UpdateRespondent(int id, RespondentDto dto)
         {
-            var parameters = new SqlParameter[]
-            {
-                new SqlParameter() {
-                    ParameterName = "@Id",
-                    SqlDbType =  System.Data.SqlDbType.Int,
-                    Direction = System.Data.ParameterDirection.Input,
-                    Value = dto.Id
-                },
-                new SqlParameter() {
-                    ParameterName = "@Name",
-                    SqlDbType =  System.Data.SqlDbType.VarChar,
-                    Direction = System.Data.ParameterDirection.Input,
-                    Size = 50,
-                    Value = dto.Name ?? (object)DBNull.Value
-                },
-                new SqlParameter() {
-                    ParameterName = "@HashedPassword",
-                    SqlDbType =  System.Data.SqlDbType.VarChar,
-                    Direction = System.Data.ParameterDirection.Input,
-                    Size = 1000,
-                    Value = dto.HashedPassword ?? (object)DBNull.Value
-                },
-                new SqlParameter() {
-                    ParameterName = "@Email",
-                    SqlDbType =  System.Data.SqlDbType.VarChar,
-                    Direction = System.Data.ParameterDirection.Input,
-                    Size = 254,
-                    Value = dto.Email ?? (object)DBNull.Value
-                }
-            };
+            var respondent = await _respondentRepository.GetAsync(id);
 
-            var affectedRows = await _respondentRepository.ExecuteSqlRawAsync("[dbo].[SP_UpdateRespondent] @Id, @Name, @HashedPassword, @Email", parameters);
+            if (respondent == null)
+                return ServiceResponseType.NotFound;
 
-            return affectedRows;
+            respondent.Name = dto.Name ?? respondent.Name;
+            respondent.HashedPassword = dto.Email ?? respondent.HashedPassword;
+            respondent.Email = dto.Email ?? respondent.Email;
+
+            await _respondentRepository.Edit(respondent);
+
+            return ServiceResponseType.Ok;
         }
 
         public async Task<bool> DeleteRespondent(int id)

@@ -14,16 +14,13 @@ namespace Surveys.Application.Services.Implementations
     public class QuestionService : IQuestionService
     {
         private readonly IQuestionRepository _questionRepository;
-        private readonly IQuestionOrderRepository _questionOrderRepository;
         private readonly IMapper _mapper;
 
         public QuestionService(
             IQuestionRepository questionRepository,
-            IQuestionOrderRepository questionOrderRepository,
             IMapper mapper)
         {
             _questionRepository = questionRepository;
-            _questionOrderRepository = questionOrderRepository;
             _mapper = mapper;
         }
 
@@ -50,40 +47,48 @@ namespace Surveys.Application.Services.Implementations
             return _mapper.Map<IEnumerable<QuestionDto>>(questions);
         }
 
-        public async Task<int> UpdateQuestion(QuestionDto dto)
+        public async Task<ServiceResponseType> UpdateQuestion(int id, QuestionDto dto)
         {
-            var parameters = new SqlParameter[]
-            {
-                new SqlParameter() {
-                    ParameterName = "@Id",
-                    SqlDbType =  System.Data.SqlDbType.Int,
-                    Direction = System.Data.ParameterDirection.Input,
-                    Value = dto.Id
-                },
-                new SqlParameter() {
-                    ParameterName = "@Text",
-                    SqlDbType =  System.Data.SqlDbType.VarChar,
-                    Direction = System.Data.ParameterDirection.Input,
-                    Size = 200,
-                    Value = dto.Text ?? (object)DBNull.Value
-                }
-            };
+            var question = await _questionRepository.GetAsync(id);
 
-            var affectedRows = await _questionRepository.ExecuteSqlRawAsync("[dbo].[SP_UpdateQuestion] @Id, @Text", parameters);
+            if (question == null)
+                return ServiceResponseType.NotFound;
 
-            return affectedRows;
+            question.Text = dto.Text ?? question.Text;
+
+            await _questionRepository.Edit(question);
+
+            return ServiceResponseType.Ok;
         }
 
-        public async Task<bool> DeleteQuestion(int id)
+        public async Task<ServiceResponseType> DeleteQuestion(int id)
         {
             var existingQuestion = await _questionRepository.GetAsync(id);
 
             if (existingQuestion == null)
-                return false;
+                return ServiceResponseType.NotFound;
 
+            var param = new SqlParameter[]
+            {
+                new SqlParameter() {
+                    ParameterName = "@QuestionId",
+                    SqlDbType =  System.Data.SqlDbType.Int,
+                    Direction = System.Data.ParameterDirection.Input,
+                    Value = id
+                },
+                new SqlParameter() {
+                    ParameterName = "@SurveyId",
+                    SqlDbType =  System.Data.SqlDbType.VarChar,
+                    Direction = System.Data.ParameterDirection.Input,
+                    Size = 50,
+                    Value = DBNull.Value
+                }
+            };
+
+            await _questionRepository.ExecuteSqlRawAsync("[dbo].[SP_DeleteQuestionOrdersBySurveyIdQuestionId] @QuestionId, @SurveyId", param);
             await _questionRepository.RemoveAsync(existingQuestion);
 
-            return true;
+            return ServiceResponseType.Ok;
         }
     }
 }
