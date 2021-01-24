@@ -87,6 +87,8 @@ namespace Surveys
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IRespondentRepository, RespondentRepository>();
             services.AddScoped<IQuestionOrderRepository, QuestionOrderRepository>();
+            services.AddScoped<ISurveyResponseRepository, SurveyResponseRepository>();
+            services.AddScoped<IResponseRepository, ResponseRepository>();
         }
 
         private void RegisterServices(IServiceCollection services)
@@ -95,6 +97,8 @@ namespace Surveys
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IRespondentService, RespondentService>();
             services.AddScoped<IQuestionOrderService, QuestionOrderService>();
+            services.AddScoped<ISurveyResponseService, SurveyResponseService>();
+            services.AddScoped<IResponseService, ResponseService>();
         }
     }
 }

@@ -8,6 +8,7 @@ namespace Surveys.Application.Services.Definitions
     public interface IQuestionOrderService
     {
         Task<IEnumerable<QuestionOrderDto>> GetQuestionOrdersBySurveyId(int id);
+        Task<IEnumerable<QuestionOrderDto>> GetQuestionOrdersByQuestionId(int id);
         Task<ServiceResponseType> ChangeQuestionOrderBySurveyId(int surveyId, int from, int to);
     }
 }

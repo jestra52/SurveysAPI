@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Surveys.Application.Dto
 {
     public class RespondentDto
     {
+        [JsonIgnore]
         public int? Id { get; set; }
 
         [MaxLength(50)]

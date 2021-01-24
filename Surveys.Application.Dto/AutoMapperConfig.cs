@@ -21,6 +21,12 @@ namespace Surveys.Application.Dto
 
             CreateMap<QuestionOrder, QuestionOrderDto>();
             CreateMap<QuestionOrderDto, QuestionOrder>();
+
+            CreateMap<SurveyResponse, SurveyResponseDto>();
+            CreateMap<SurveyResponseDto, SurveyResponse>();
+
+            CreateMap<Response, ResponseDto>();
+            CreateMap<ResponseDto, Response>();
         }
     }
 }

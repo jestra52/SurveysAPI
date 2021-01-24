@@ -29,6 +29,13 @@ namespace Surveys.Application.Services.Implementations
             return _mapper.Map<IEnumerable<QuestionOrderDto>>(questionOrders).OrderBy(q => q.OrderNbr);
         }
 
+        public async Task<IEnumerable<QuestionOrderDto>> GetQuestionOrdersByQuestionId(int id)
+        {
+            var questionOrders = await _questionOrderRepository.GetQuestionOrdersByForeignId(id, (int)CallerType.Question);
+
+            return _mapper.Map<IEnumerable<QuestionOrderDto>>(questionOrders).OrderBy(q => q.OrderNbr);
+        }
+
         public async Task<ServiceResponseType> ChangeQuestionOrderBySurveyId(int surveyId, int from, int to)
         {
             var questionOrders = await _questionOrderRepository.GetQuestionOrdersByForeignId(surveyId, (int)CallerType.Survey);

@@ -51,8 +51,8 @@ INSERT INTO [dbo].[SurveyResponse] ([SurveyId], [RespondentId]) VALUES
 (2, 1);
 
 INSERT INTO [dbo].[Response] ([SurveyResponseId], [QuestionId], [RespondentId], [Answer]) VALUES
-(1, 1, 1, 'YES'),
-(2, 1, 2, 'NO'),
-(3, 1, 3, 'YES'),
-(4, 1, 4, 'DO NOT KNOW'),
-(2, 2, 1, 'NO');
+(1, 2, 1, 'YES'),
+(1, 3, 1, 'NO'),
+(1, 4, 1, 'YES'),
+(1, 5, 1, 'DO NOT KNOW'),
+(2, 2, 2, 'NO');

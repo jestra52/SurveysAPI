@@ -20,10 +20,25 @@ namespace Surveys.Presentation.Api.Controllers
         /// Gets the question order by Survey Id.
         /// </summary>
         [HttpGet]
-        [Route("{surveyId:int}", Name = nameof(GetQuestionOrders))]
-        public async Task<IActionResult> GetQuestionOrders(int surveyId)
+        [Route("GetBySurveyId/{surveyId:int}", Name = nameof(GetQuestionOrdersBySurveyId))]
+        public async Task<IActionResult> GetQuestionOrdersBySurveyId(int surveyId)
         {
             var questionOrder = await _questionOrderService.GetQuestionOrdersBySurveyId(surveyId);
+
+            if (questionOrder == null)
+                return NotFound();
+
+            return Ok(questionOrder);
+        }
+
+        /// <summary>
+        /// Gets the question order by Question Id.
+        /// </summary>
+        [HttpGet]
+        [Route("GetByQuestionId{questionId:int}", Name = nameof(GetQuestionOrdersByQuestionId))]
+        public async Task<IActionResult> GetQuestionOrdersByQuestionId(int questionId)
+        {
+            var questionOrder = await _questionOrderService.GetQuestionOrdersByQuestionId(questionId);
 
             if (questionOrder == null)
                 return NotFound();
