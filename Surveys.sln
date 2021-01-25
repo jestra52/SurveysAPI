@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{63
 		Database\Data.sql = Database\Data.sql
 		Database\Schema.sql = Database\Schema.sql
 		Database\SP_DeleteQuestionOrdersBySurveyIdQuestionId.sql = Database\SP_DeleteQuestionOrdersBySurveyIdQuestionId.sql
+		Database\VSurveyResponses.sql = Database\VSurveyResponses.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{48728E47-6384-49A1-80F0-90441B0CC7BB}"

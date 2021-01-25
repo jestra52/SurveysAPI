@@ -16,15 +16,18 @@ namespace Surveys.Application.Services.Implementations
     {
         private readonly ISurveyRepository _surveyRepository;
         private readonly IQuestionOrderRepository _questionOrderRepository;
+        private readonly IVSurveyResponsesRepository _vSurveyResponsesRepository;
         private readonly IMapper _mapper;
 
         public SurveyService(
             ISurveyRepository surveyRepository,
             IQuestionOrderRepository questionOrderRepository,
+            IVSurveyResponsesRepository vSurveyResponsesRepository,
             IMapper mapper)
         {
             _surveyRepository = surveyRepository;
             _questionOrderRepository = questionOrderRepository;
+            _vSurveyResponsesRepository = vSurveyResponsesRepository;
             _mapper = mapper;
         }
 
@@ -106,6 +109,13 @@ namespace Surveys.Application.Services.Implementations
             await _surveyRepository.RemoveAsync(existingSurvey);
 
             return true;
+        }
+
+        public async Task<IEnumerable<VSurveyResponsesDto>> GetVSurveyResponsesAsync()
+        {
+            var results = await _vSurveyResponsesRepository.GetAllAsync();
+
+            return _mapper.Map<IEnumerable<VSurveyResponsesDto>>(results);
         }
     }
 }

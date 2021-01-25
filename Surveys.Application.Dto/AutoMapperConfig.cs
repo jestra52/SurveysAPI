@@ -27,6 +27,9 @@ namespace Surveys.Application.Dto
 
             CreateMap<Response, ResponseDto>();
             CreateMap<ResponseDto, Response>();
+
+            CreateMap<VSurveyResponses, VSurveyResponsesDto>();
+            CreateMap<VSurveyResponsesDto, VSurveyResponses>();
         }
     }
 }

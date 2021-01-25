@@ -98,6 +98,22 @@ namespace Surveys.Presentation.Api.Controllers
         }
 
         /// <summary>
+        /// Retrieves the number of total responses by Survey.
+        /// </summary>
+        [HttpGet]
+        [Route(nameof(GetTotalResponses))]
+        public async Task<IActionResult> GetTotalResponses()
+        {
+            _logger.LogInformation("Performing fetching request...");
+
+            var results = await _surveyService.GetVSurveyResponsesAsync();
+
+            _logger.LogInformation("Sending response...");
+
+            return Ok(new { results });
+        }
+
+        /// <summary>
         /// Updates a Survey by given Id.
         /// </summary>
         /// <remarks>

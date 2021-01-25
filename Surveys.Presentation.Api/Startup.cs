@@ -89,6 +89,7 @@ namespace Surveys
             services.AddScoped<IQuestionOrderRepository, QuestionOrderRepository>();
             services.AddScoped<ISurveyResponseRepository, SurveyResponseRepository>();
             services.AddScoped<IResponseRepository, ResponseRepository>();
+            services.AddScoped<IVSurveyResponsesRepository, VSurveyResponsesRepository>();
         }
 
         private void RegisterServices(IServiceCollection services)

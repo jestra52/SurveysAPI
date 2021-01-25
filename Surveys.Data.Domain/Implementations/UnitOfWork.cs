@@ -20,6 +20,7 @@ namespace Surveys.Data.Domain.Implementations
         public virtual DbSet<Response> Response { get; set; }
         public virtual DbSet<Survey> Survey { get; set; }
         public virtual DbSet<SurveyResponse> SurveyResponse { get; set; }
+        public virtual DbSet<VSurveyResponses> VSurveyResponses { get; set; }
 
         #endregion
 
@@ -182,6 +183,17 @@ namespace Surveys.Data.Domain.Implementations
                     .WithMany(p => p.SurveyResponses)
                     .HasForeignKey(d => d.SurveyId)
                     .HasConstraintName("FK__SurveyRes__Surve__17F790F9");
+            });
+
+            modelBuilder.Entity<VSurveyResponses>(entity =>
+            {
+                entity.HasNoKey();
+                entity.ToView("VSurveyResponses");
+
+                entity.Property(v => v.SurveyId).HasColumnName("SurveyId");
+                entity.Property(v => v.SurveyName).HasColumnName("SurveyName");
+                entity.Property(v => v.SurveyDescription).HasColumnName("SurveyDescription");
+                entity.Property(v => v.TotalResponses).HasColumnName("TotalResponses");
             });
         }
     }
