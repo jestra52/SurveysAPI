@@ -48,10 +48,13 @@ SurveysAPI
 └─── Database -> Database scripts such as schema, data, stored procedures and views
 └─── Surveys.Tests -> Test project for unit testing and integration testing
 └─── Surveys.Application.Dto -> DTOs and Mapper configuration
-└─── Surveys.Application.Services -> Service layer that performs as an intermediary between presentation and data access
+└─── Surveys.Application.Services -> Service layer that performs as an intermediary
+                                     between presentation and data access
 └─── Surveys.Common.Enum -> Enum files
 └─── Surveys.Data.Domain -> Data access layer that contains entities, repositories and DbContext
-└─── Surveys.Presentation.Api -> Presentation layer and main project that contains Controllers/Endpoints and configuration items such as Dependency injection, Error handling, Logging, Documentation, etc.
+└─── Surveys.Presentation.Api -> Presentation layer and main project that contains
+                                 Controllers/Endpoints and configuration items such as
+                                 Dependency injection, Error handling, Logging, Documentation, etc.
 ```
 
 ### Design and architecture 
@@ -63,5 +66,5 @@ SurveysAPI
 
 ## Missing points and enhancement opportunities
 - I only implemented data related mutations for the Survey, Question and QuestionOrder tables. So, if a Respondent gets deleted their related data in Response and SurveyResponse tables does not get deleted. It can be improved by creating a Stored Procedure that could handle this operations between these three last tables.
-- Integrations tests could be implemented for the others endpoints as well, not only the Survey endpoint.
+- Integration tests could be implemented for the others endpoints as well, not only the Survey endpoint.
 - My implementation of the Repository pattern and the Unit of Work pattern could improved by abstracting another specific operations that some repositories have in common.
