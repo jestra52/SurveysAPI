@@ -68,3 +68,4 @@ SurveysAPI
 - I only implemented data related mutations for the Survey, Question and QuestionOrder tables. So, if a Respondent gets deleted their related data in Response and SurveyResponse tables does not get deleted. It can be improved by creating a Stored Procedure that could handle this operations between these three last tables.
 - Integration tests could be implemented for the others endpoints as well, not only the Survey endpoint.
 - My implementation of the Repository pattern and the Unit of Work pattern could improved by abstracting another specific operations that some repositories have in common.
+- It would be nice to implement security for connection strings such as a secrets file, because, as you can see, I haven't done it with my connection string :sweat_smile:
