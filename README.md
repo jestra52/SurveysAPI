@@ -31,7 +31,7 @@ $ dotnet run
 Then go to your web explorer and open http://localhost:5000. It will launch the documentation page
 with all the services available.
 
-![homepage](Documentation/homePage.png)
+![homepage](homePage.png)
 
 To run the Tests just follow these steps:
 
