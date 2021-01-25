@@ -6,7 +6,7 @@ An API created for TEAM's international .NET challenge. I hope you like my imple
 - [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) (3.1.11)
 - [SQL Server 2019](https://www.microsoft.com/es-es/sql-server/sql-server-2019)
 ---
-## Setup for web app
+## Setup for Web API
 **Note:** There is already an Azure DB instance connected to the appsettings.json. If you wish
 to run the API with a local DB instance make sure to run before these SQL scripts located in the Database folder:
 
